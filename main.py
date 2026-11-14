@@ -17,16 +17,24 @@
 #   * Heavy tails: Student-t(8df) quantiles instead of normal ones. Prices
 #     move in steps and jump; the normal's tails are too thin.
 #   * Asymmetric tails: the downside scale (1.3) is wider than the upside
-#     (0.7). In a multi-outcome event most candidates are losers whose price
+#     (0.6). In a multi-outcome event most candidates are losers whose price
 #     collapses toward zero; downside jumps are systematically larger.
+#     Revision 2026-11-14: the upside scale was 0.7 in the first submission;
+#     a one-parameter sweep on the practice cases put the smooth optimum
+#     near 0.5 (loss 0.281669) and 0.6 (0.281893) vs 0.7 (0.282383), with
+#     5 of 6 cases improving at 0.6. 0.6 was chosen over the argmin 0.5
+#     because it keeps most of the gain while limiting the damage on the
+#     one upside-move case (p02) and the 90% coverage loss (0.8571 vs
+#     0.8613) — a guard against overfitting the practice set.
 #   * A 30% blend with a price-space band whose sigma scales with
 #     sqrt(x(1-x)) adds a little extra width for mid-range markets, where the
 #     logit band alone runs slightly narrow.
 #
 # Local practice score (own scorer, exact pinball formula from the rules,
 # answers fetched from Polymarket's public price history):
-#   house baseline: 0.363589 | this entry: 0.282084
-#   (median error 0.7675, 90% coverage 0.8589 — same median error as the
+#   house baseline: 0.363589 | this entry: 0.281893 (revised; first
+#   submission scored 0.282383 with UP_SCALE 0.7)
+#   (median error 0.7675, 90% coverage 0.8571 — same median error as the
 #   baseline, the whole gain is calibration of the bands.)
 #
 # Standard library only, deterministic, no network, no randomness.
@@ -47,7 +55,7 @@ T8 = [-1.859548, -0.706387, 0.0, 0.706387, 1.859548]
 Z = [-1.644854, -0.674490, 0.0, 0.674490, 1.644854]
 
 SIGMA_LOGIT = 0.02    # logit-space spread per sqrt-minute
-UP_SCALE = 0.7         # upside tail multiplier
+UP_SCALE = 0.6         # upside tail multiplier (revised from 0.7, 2026-11-14)
 DOWN_SCALE = 1.3       # downside tail multiplier
 XDEP_A = 0.006          # price-space sigma = A * sqrt(x(1-x)) per sqrt-minute
 LOGIT_WEIGHT = 0.7      # blend weight of the logit component
