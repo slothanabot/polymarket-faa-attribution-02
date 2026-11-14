@@ -26,9 +26,16 @@ Polymarket's public price history:
 | | pinball loss |
 |---|---|
 | house baseline | 0.363589 |
-| this entry | 0.282383 |
+| this entry | 0.281893 |
 
-Median error 0.7675, 90% coverage 0.8613.
+Median error 0.7675, 90% coverage 0.8571.
+
+**Revision 2026-11-14:** upside tail multiplier narrowed 0.7 → 0.6 after a
+one-parameter sweep on the practice cases (0.5 scored 0.281669 in-sample,
+0.6 scored 0.281893, 0.7 scored 0.282383; 5 of 6 cases improve at 0.6).
+0.6 was chosen over the in-sample argmin 0.5 to limit damage on the one
+upside-move practice case (p02) and the coverage loss — a guard against
+overfitting the practice set.
 
 ## Run
 
